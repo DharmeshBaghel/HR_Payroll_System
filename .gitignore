@@ -5,3 +5,4 @@ target/
 .classpath
 .project
 .DS_Store
+payroll_system/src/main/resources/application.properties
