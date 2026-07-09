@@ -79,40 +79,16 @@ The JPA entity relationships map to three primary logical tables in the embedded
 
 1. Employee
 
-| Field              | Type   | Modifiers                 | Description                          |
-| :--- | :--- | :--- | :---: | ---: |
-| id                 | Long   | @Id (Assigned 6-Digit ID) | Unique PK generated on service level |
-| name               | String | Not Null                  | Complete legal name                  |
-| email              | String | Unique, Not Null          | Work email address                   |
-| password           | String | Not Null                  | Secure plain-text string             |
-| department         | String | -                         | Organizational division              |
-| role               | String | -                         | Job role title                       |
-| baseSalary         | Double | -                         | Monthly standard salary rate         |
-| sickLeaveBalance   | int    | Default: 12               | Tracking counter                     |
-| casualLeaveBalance | int    | Default: 15               | Tracking counter                     |
-
-2. Leave
-
 | Field | Type | Modifiers | Description |
-| :--- | :--- | :--- | :---: | ---: |
-| id | Long | @GeneratedValue | Primary Key |
-| employee | Employee | @ManyToOne (Not Null) | Associated foreign key relation |
-| startDate | LocalDate | Not Null | Leave epoch start date |
-| endDate | LocalDate | Not Null | Leave epoch end date |
-| leaveType | String | - | SICK, CASUAL, or UNPAID |
-| status | String | Default: PENDING | Current state of request |
-| rejectionReason | String | Limit: 500 characters | Feedback if request is declined |
-
-3. Payroll
-
-| Field | Type | Modifiers | Description |
-| :--- | :--- | :--- | :---: | ---: |
-| id | Long | @GeneratedValue | Primary Key |
-| employee | Employee | @ManyToOne (Not Null) | Disbursed to employee relationship |
-| salaryMonth | String | - | String Representation of Month |
-| salaryYear | int | - | Numeric Year target |
-| basicSalary | Double | - | Standard pre-tax threshold |
-| taxDeduction | Double | - | Sum
+| id | Long | @Id (Assigned 6-Digit ID) | Unique PK generated on service level |
+| name | String | Not Null | Complete legal name |
+| email | String | Unique, Not Null | Work email address |
+| password | String | Not Null | Secure plain-text string |
+| department | String | - | Organizational division |
+| role | String | - | Job role title |
+| baseSalary | Double | - | Monthly standard salary rate |
+| sickLeaveBalance | int | Default: 12 | Tracking counter |
+| casualLeaveBalance | int | Default: 15 | Tracking counter |
 
 
 | id | user_name | email | role | created_at |
