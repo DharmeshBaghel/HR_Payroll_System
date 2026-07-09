@@ -79,16 +79,16 @@ The JPA entity relationships map to three primary logical tables in the embedded
 
 1. Employee
 
-| Field | Type | Modifiers | Description |
-| id | Long | @Id (Assigned 6-Digit ID) | Unique PK generated on service level |
-| name | String | Not Null | Complete legal name |
-| email | String | Unique, Not Null | Work email address |
-| password | String | Not Null | Secure plain-text string |
-| department | String | - | Organizational division |
-| role | String | - | Job role title |
-| baseSalary | Double | - | Monthly standard salary rate |
-| sickLeaveBalance | int | Default: 12 | Tracking counter |
-| casualLeaveBalance | int | Default: 15 | Tracking counter |
+| Field              | Type   | Modifiers                 | Description                          |
+| id                 | Long   | @Id (Assigned 6-Digit ID) | Unique PK generated on service level |
+| name               | String | Not Null                  | Complete legal name                  |
+| email              | String | Unique, Not Null          | Work email address                   |
+| password           | String | Not Null                  | Secure plain-text string             |
+| department         | String | -                         | Organizational division              |
+| role               | String | -                         | Job role title                       |
+| baseSalary         | Double | -                         | Monthly standard salary rate         |
+| sickLeaveBalance   | int    | Default: 12               | Tracking counter                     |
+| casualLeaveBalance | int    | Default: 15               | Tracking counter                     |
 
 2. Leave
 
