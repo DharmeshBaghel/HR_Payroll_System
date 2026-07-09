@@ -53,6 +53,60 @@ The `PayrollService` evaluates monthly net salary structures based on the follow
 Let $S_{base}$ represent the Employee's annual base salary, $D_{unpaid}$ represent the count of approved unpaid leave days during the billing cycle, and $R_{day}$ represent the calculated daily rate of pay:
 
 $$
-x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+R_{day} = \frac{S_{base}}{30}
 $$
 
+The deduction applied for taking unpaid time off ($Ded_{unpaid}$) is modeled as:
+
+$$
+Ded_{unpaid} = D_{unpaid} \times R_{day}
+$$
+
+A flat rate of $10\%$ income tax ($T$) is evaluated from the adjusted basic salary:
+
+$$
+T = S_{basic} \times 0.10
+$$
+
+The ultimate calculated Net Monthly Salary ($S_{net}$) disbursed to the employee is defined as:
+
+$$
+S_{net} = S_{basic} - T
+$$
+
+## Database Schema (Entities)
+The JPA entity relationships map to three primary logical tables in the embedded engine:
+
+1. Employee
+
+| Field | Type | Modifiers | Description |
+| id | Long | @Id (Assigned 6-Digit ID) | Unique PK generated on service level |
+| name | String | Not Null | Complete legal name |
+| email | String | Unique, Not Null | Work email address |
+| password | String | Not Null | Secure plain-text string |
+| department | String | - | Organizational division |
+| role | String | - | Job role title |
+| baseSalary | Double | - | Monthly standard salary rate |
+| sickLeaveBalance | int | Default: 12 | Tracking counter |
+| casualLeaveBalance | int | Default: 15 | Tracking counter |
+
+2. Leave
+
+| Field | Type | Modifiers | Description |
+| id | Long | @GeneratedValue | Primary Key |
+| employee | Employee | @ManyToOne (Not Null) | Associated foreign key relation |
+| startDate | LocalDate | Not Null | Leave epoch start date |
+| endDate | LocalDate | Not Null | Leave epoch end date |
+| leaveType | String | - | SICK, CASUAL, or UNPAID |
+| status | String | Default: PENDING | Current state of request |
+| rejectionReason | String | Limit: 500 characters | Feedback if request is declined |
+
+3. Payroll
+
+| Field | Type | Modifiers | Description |
+| id | Long | @GeneratedValue | Primary Key |
+| employee | Employee | @ManyToOne (Not Null) | Disbursed to employee relationship |
+| salaryMonth | String | - | String Representation of Month |
+| salaryYear | int | - | Numeric Year target |
+| basicSalary | Double | - | Standard pre-tax threshold |
+| taxDeduction | Double | - | Sum
