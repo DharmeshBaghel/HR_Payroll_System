@@ -51,6 +51,8 @@ graph TD
 The `PayrollService` evaluates monthly net salary structures based on the following mathematical rules:
 
 Let $S_{base}$ represent the Employee's annual base salary, $D_{unpaid}$ represent the count of approved unpaid leave days during the billing cycle, and $R_{day}$ represent the calculated daily rate of pay:
+
 $$
-R_{day} = \frac{S_{base}}{30}
+x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
 $$
+
