@@ -110,3 +110,9 @@ The JPA entity relationships map to three primary logical tables in the embedded
 | salaryYear | int | - | Numeric Year target |
 | basicSalary | Double | - | Standard pre-tax threshold |
 | taxDeduction | Double | - | Sum
+
+
+| id | user_name | email | role | created_at |
+| :--- | :--- | :--- | :---: | ---: |
+| 1 | alice_db | alice@example.com | Admin | 2026-07-09 |
+| 2 | bob_sql | bob@example.com | User | 2026-07-08 |
