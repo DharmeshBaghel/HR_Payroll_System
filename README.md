@@ -77,7 +77,7 @@ $$
 ## Database Schema (Entities)
 The JPA entity relationships map to three primary logical tables in the embedded engine:
 
-| id | user_name | email | role | created_at |
+| Field | Type | Modifiers | Description |
 | id | Long | @Id (Assigned 6-Digit ID) | Unique PK generated on service level |
 | name | String | Not Null | Complete legal name |
 | email | String | Unique, Not Null | Work email address |
@@ -93,3 +93,10 @@ The JPA entity relationships map to three primary logical tables in the embedded
 | :--- | :--- | :--- | :---: | ---: |
 | 1 | alice_db | alice@example.com | Admin | 2026-07-09 |
 | 2 | bob_sql | bob@example.com | User | 2026-07-08 |
+
+| Header 1 | Header 2 | Header 3 |
+| --- | --- | --- |
+| Row 1 Col 1 | Row 1 Col 2 | Row 1 Col 3 |
+| Row 2 Col 1 | Row 2 Col 2 | Row 2 Col 3 |
+| Row 3 Col 1 | Row 3 Col 2 | Row 3 Col 3 |
+
