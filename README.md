@@ -80,6 +80,7 @@ The JPA entity relationships map to three primary logical tables in the embedded
 1. Employee
 
 | Field              | Type   | Modifiers                 | Description                          |
+| :--- | :--- | :--- | :---: | ---: |
 | id                 | Long   | @Id (Assigned 6-Digit ID) | Unique PK generated on service level |
 | name               | String | Not Null                  | Complete legal name                  |
 | email              | String | Unique, Not Null          | Work email address                   |
@@ -93,6 +94,7 @@ The JPA entity relationships map to three primary logical tables in the embedded
 2. Leave
 
 | Field | Type | Modifiers | Description |
+| :--- | :--- | :--- | :---: | ---: |
 | id | Long | @GeneratedValue | Primary Key |
 | employee | Employee | @ManyToOne (Not Null) | Associated foreign key relation |
 | startDate | LocalDate | Not Null | Leave epoch start date |
@@ -104,6 +106,7 @@ The JPA entity relationships map to three primary logical tables in the embedded
 3. Payroll
 
 | Field | Type | Modifiers | Description |
+| :--- | :--- | :--- | :---: | ---: |
 | id | Long | @GeneratedValue | Primary Key |
 | employee | Employee | @ManyToOne (Not Null) | Disbursed to employee relationship |
 | salaryMonth | String | - | String Representation of Month |
