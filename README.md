@@ -77,6 +77,8 @@ $$
 ## Database Schema (Entities)
 The JPA entity relationships map to three primary logical tables in the embedded engine:
 
+1. `Employee`
+
 | Field | Type | Modifier | Description |
 | --- | --- | --- | --- |
 | id | Long | @Id (Assigned 6-Digit ID) | Unique PK generated on service level |
@@ -89,15 +91,117 @@ The JPA entity relationships map to three primary logical tables in the embedded
 | sickLeaveBalance | int | Default: 12 | Tracking counter |
 | casualLeaveBalance | int | Default: 15 | Tracking counter |
 
+2. `Leave`
 
-| id | user_name | email | role | created_at |
-| :--- | :--- | :--- | :---: | ---: |
-| 1 | alice_db | alice@example.com | Admin | 2026-07-09 |
-| 2 | bob_sql | bob@example.com | User | 2026-07-08 |
+| Field | Type | Modifier | Description |
+| --- | --- | --- | --- |
+| id | Long | @GeneratedValue | Primary Key |
+| employee | Employee | @ManyToOne (Not Null) | Associated foreign key relation |
+| startDate | LocalDate | Not Null | Leave epoch start date |
+| endDate | LocalDate | Not Null | Leave epoch end date |
+| leaveType | String | - | SICK, CASUAL, or UNPAID |
+| status | String | Default: PENDING | Current state of request |
+| rejectionReason | String | Limit: 500 characters | Feedback if request is declined |
 
-| Header 1 | Header 2 | Header 3 |
-| --- | --- | --- |
-| Row 1 Col 1 | Row 1 Col 2 | Row 1 Col 3 |
-| Row 2 Col 1 | Row 2 Col 2 | Row 2 Col 3 |
-| Row 3 Col 1 | Row 3 Col 2 | Row 3 Col 3 |
+3. `Payroll`
 
+| Field | Type | Modifier | Description |
+| --- | --- | --- | --- |
+| id | Long | @GeneratedValue | Primary Key |
+| employee | Employee | @ManyToOne (Not Null) | Disbursed to employee relationship |
+| salaryMonth | String | - | String Representation of Month |
+| salaryYear | int | - | Numeric Year target |
+| basicSalary | Double | - | Standard pre-tax threshold |
+| taxDeduction | Double | - | Sum of income tax + unpaid days penalty |
+| netSalary | Double | - | Final pay-out amount |
+
+## REST API Specifications
+
+The core engine exposes the following structured JSON endpoints:
+
+### Employee Management
+* `GET /api/employees`
+    - Description: Retrieves all personnel profiles.
+
+* `POST /api/employees`
+    - Payload: { `"name": "...", "email": "...", "password": "...", "department": "...", "role": "...", "baseSalary": 50000` }
+    - Description: Provisions a new employee with an auto-generated unique random 6-digit ID.
+
+* `POST /api/employees/login`
+    - Payload: { `"id": 102948, "password": "..."` }
+    - Description: Validates user credentials. Returns the authentic Employee payload or returns HTTP 401 Unauthorized.
+
+* `GET /api/employees/export`
+    - Description: Fetches a raw stream of current personnel data parsed into a .csv file attachment download.
+
+### Leave Tracking
+* `POST /api/leaves/request`
+    - Payload: { `"employee": { "id": 102948 }, "startDate": "YYYY-MM-DD", "endDate": "YYYY-MM-DD", "leaveType": "..."` }
+    - Description: Commits a new pending leave request into processing.
+  
+* `GET /api/leaves/employee/{employeeId}`
+    - Description: Retrieves the comprehensive leave logging history associated with a specific employee.
+
+* `PUT /api/leaves/{leaveId}/status`
+    - Parameters: `status` (Required, e.g. "APPROVED" or "REJECTED"), `reason` (Optional string)
+    - Description: Authorizes or declines a request. Deducts leave balances accordingly on approval, or appends the reason on rejection.
+
+### Payroll & Documents
+* `POST /api/payroll/generate/{employeeId}`
+    - Parameters: `month` (e.g. "August"), `year` (e.g. 2026)
+    - Description: Invokes calculations, parses unpaid day counts, and generates a payroll record.
+
+* `GET /api/payroll/employee/{employeeId}`
+    - Description: Retrieves historical slip records.
+
+* `GET /api/payroll/{payrollId}/download`
+    - Description: Generates and compiles a structural PDF payload representing an official company pay slip for instant printing/download.
+
+## Installation & Launch Guide
+
+### Prerequisites
+* Java Development Kit (JDK): Version 17 or higher.
+* Apache Maven: (If not using the Maven Wrapper ./mvnw).
+* Modern Web Browser: Chrome, Edge, Safari, or Firefox.
+
+Step 1: Clone the Codebase
+```
+git clone https://github.com/DharmeshBaghel/HR_Payroll_System.git
+cd HR_Payroll_System
+```
+
+Step 2: Configure Application Settings
+Make sure to create an `application.properties` file in `src/main/resources/` (Ensure this isn't checked into your public Git index using your `.gitignore` configuration):
+```
+# App Config
+spring.application.name=NexusHR
+server.port=8080
+
+# Database Layer (In-Memory H2)
+spring.datasource.url=jdbc:h2:mem:nexushrdb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+
+# Console Enablement
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+```
+
+Step 3: Run the Application
+Start the embedded Tomcat server via Maven in your terminal:
+```
+# Windows
+mvn spring-boot:run
+
+# macOS / Linux
+./mvnw spring-boot:run
+````
+Once you see the Spring console output log Started `PayrollSystemApplication` in X seconds, the server is running.
+
+Step 4: Access the Frontend Portal
+Open your web browser and navigate directly to:
+```
+http://localhost:8080/index.html
+```
