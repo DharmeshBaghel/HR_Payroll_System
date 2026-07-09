@@ -77,8 +77,6 @@ $$
 ## Database Schema (Entities)
 The JPA entity relationships map to three primary logical tables in the embedded engine:
 
-1. Employee
-
 | Field | Type | Modifiers | Description |
 | id | Long | @Id (Assigned 6-Digit ID) | Unique PK generated on service level |
 | name | String | Not Null | Complete legal name |
